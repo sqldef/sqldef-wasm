@@ -1,0 +1,28 @@
+{
+  "name": "sqldef",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Simple wasm wrapper around sqldef for easy use with web/node/bun/deno",
+  "keywords": [
+    "migration",
+    "mysql",
+    "postgres"
+  ],
+  "main": "index.cjs",
+  "exports": {
+    ".": "./index.js"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "author": "David Konsumer <konsumer@jetboystudio.com> (http://konsumer.js.org)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sqldef/sqldef-wasm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sqldef/sqldef-wasm/issues"
+  },
+  "homepage": "https://github.com/sqldef/sqldef-wasm#readme"
+}
