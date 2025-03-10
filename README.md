@@ -33,7 +33,7 @@ Normally, you should not need to do this stuff, but for local dev:
 
 ```bash
 # start a watching local web-server
-# /sqldef is aliases to root-dir
+# /sqldef is aliased to root-dir
 npm start
 
 # run all unit-tests
