@@ -13,7 +13,8 @@
     ".": "./index.js"
   },
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "start": "npx -y live-server docs"
   },
   "author": "David Konsumer <konsumer@jetboystudio.com> (http://konsumer.js.org)",
   "license": "MIT",
