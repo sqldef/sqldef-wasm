@@ -29,10 +29,6 @@ CREATE TABLE user (
 const output = await sqldef('mysql', sql1, sql2)
 ```
 
-_TODO_: notes about web/bun/deno/etc
-_TODO_: make node CLI that can actually perform operations on real database
-
-
 ### development
 
 Normally, you should not need to do this stuff, but for local dev:
@@ -48,3 +44,8 @@ npm start
 # run all unit-tests
 npm t
 ```
+
+## todo
+
+- more notes about web/bun/deno/etc
+- make node CLI that can actually perform operations on real database
