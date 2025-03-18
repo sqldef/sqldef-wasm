@@ -25,5 +25,17 @@
   "bugs": {
     "url": "https://github.com/sqldef/sqldef-wasm/issues"
   },
-  "homepage": "https://github.com/sqldef/sqldef-wasm#readme"
+  "homepage": "https://github.com/sqldef/sqldef-wasm#readme",
+  "bin": {
+    "sqldef": "cli.mjs"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.9.1",
+    "cosmiconfig": "^9.0.0",
+    "mysql2": "^3.13.0",
+    "pg": "^8.14.1",
+    "prompt-confirm": "^2.0.4",
+    "tedious": "^18.6.1",
+    "yargs": "^17.7.2"
+  }
 }
