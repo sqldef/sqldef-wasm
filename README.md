@@ -29,6 +29,8 @@ CREATE TABLE user (
 const output = await sqldef('mysql', sql1, sql2)
 ```
 
+Supported types: `mysql`, `sqlite3`, `mssql`, `postgres`.
+
 ### development
 
 Normally, you should not need to do this stuff, but for local dev:

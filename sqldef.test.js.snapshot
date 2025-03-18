@@ -11,9 +11,13 @@ exports[`should be able to diff some postgres 1`] = `
 `;
 
 exports[`should be able to diff some sqlite 1`] = `
-"ALTER TABLE \`user\` CHANGE COLUMN \`id\` \`id\` int NOT NULL;\\nALTER TABLE \`user\` DROP COLUMN \`name\`"
+"ALTER TABLE \`user\` DROP COLUMN \`name\`"
 `;
 
 exports[`should throw on bad SQL 1`] = `
 "found syntax error when parsing DDL \\"BAD STUFF\\": syntax error at position 4 near 'BAD'"
+`;
+
+exports[`should throw on bad type 1`] = `
+"Invalid type: sqlite. Use mysql/sqlite3/mssql/postgres"
 `;

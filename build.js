@@ -9,6 +9,9 @@ const buf = new Uint8Array([${[...buf].join(',')}])
 const go = new Go()
 
 export default async (t,s1,s2) => {
+  if (!['mysql', 'sqlite3', 'mssql', 'postgres'].includes(t)) {
+    throw new Error(\`Invalid type: \${t}. Use mysql/sqlite3/mssql/postgres\`)
+  }
   const inst = await WebAssembly.instantiate(buf, go.importObject)
   go.run(inst.instance)
   const sqlDefModule = createSqlDefModule()
