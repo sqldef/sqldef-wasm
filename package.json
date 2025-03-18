@@ -25,8 +25,5 @@
   "bugs": {
     "url": "https://github.com/sqldef/sqldef-wasm/issues"
   },
-  "homepage": "https://github.com/sqldef/sqldef-wasm#readme",
-  "devDependencies": {
-    "esbuild": "^0.25.1"
-  }
+  "homepage": "https://github.com/sqldef/sqldef-wasm#readme"
 }
