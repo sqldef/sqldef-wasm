@@ -32,6 +32,9 @@ _TODO_: notes about web
 Normally, you should not need to do this stuff, but for local dev:
 
 ```bash
+# build wasm
+npm run build
+
 # start a watching local web-server
 # /sqldef is aliased to root-dir
 npm start

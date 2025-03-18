@@ -13,7 +13,8 @@
   },
   "scripts": {
     "test": "node --test",
-    "start": "npx -y live-server docs --mount=/sqldef:."
+    "start": "npx -y live-server docs --mount=/sqldef:.",
+    "build" : "GOOS=js GOARCH=wasm go build $GOFLAGS -o sqldef.wasm sqldef-wasm.go"
   },
   "author": "David Konsumer <konsumer@jetboystudio.com> (http://konsumer.js.org)",
   "license": "MIT",
