@@ -37,7 +37,7 @@ test('should be able to diff some mssql', async ({ assert }) => {
 })
 
 test('should be able to diff some sqlite', async ({ assert }) => {
- const sql1 = `
+  const sql1 = `
   CREATE TABLE IF NOT EXISTS user (
     id INT PRIMARY KEY
   );
@@ -54,7 +54,7 @@ test('should be able to diff some sqlite', async ({ assert }) => {
 })
 
 test('should be able to diff some postgres', async ({ assert }) => {
- const sql1 = `
+  const sql1 = `
   CREATE TABLE IF NOT EXISTS user (
     id INT PRIMARY KEY
   );
@@ -71,17 +71,17 @@ test('should be able to diff some postgres', async ({ assert }) => {
   assert.snapshot(r)
 })
 
-test('should throw on bad SQL', async ({assert}) => {
+test('should throw on bad SQL', async ({ assert }) => {
   try {
     await sqldef('mysql', 'BAD STUFF', 'NOT SQL, SORRRY')
     assert.equal(true, 'Should have thrown')
-  } catch(e) {
+  } catch (e) {
     assert.snapshot(e.message)
   }
 })
 
 test('should throw on bad type', async ({ assert }) => {
- const sql1 = `
+  const sql1 = `
   CREATE TABLE IF NOT EXISTS user (
     id INT PRIMARY KEY
   );
@@ -96,7 +96,7 @@ test('should throw on bad type', async ({ assert }) => {
   try {
     await sqldef('sqlite', sql1, sql2)
     assert.equal(true, 'Should have thrown')
-  } catch(e) {
+  } catch (e) {
     assert.snapshot(e.message)
   }
 })
