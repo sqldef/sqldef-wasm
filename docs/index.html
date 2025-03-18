@@ -1,12 +1,44 @@
 <html>
   <head>
     <title>sqldef</title>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+      .demo {
+        display: flex;
+        gap: 10px;
+      }
+      textarea {
+        height: 50vh;
+        flex: 1;
+      }
+    </style>
   </head>
   <body>
     <p>This is meant to be a very simple demo. Please see <a href="https://sqldef.github.io">our site</a> for docs & more complete demo.</p>
+
+    <div class="demo">
+      <textarea readonly>
+CREATE TABLE user (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(128) DEFAULT 'konsumer'
+) Engine=InnoDB DEFAULT CHARSET=utf8mb4;
+      </textarea>
+      <textarea readonly>
+CREATE TABLE user (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(128) DEFAULT 'konsumer',
+  created_at DATETIME NOT NULL
+) Engine=InnoDB DEFAULT CHARSET=utf8mb4;
+      </textarea>
+      <textarea readonly></textarea>
+    </div>
+
     <script type="module">
       import sqldef from '/sqldef/index.js'
-      // put demo code here
+      const [tin, tchange, tout] = document.querySelectorAll('textarea')
+      tout.value = await sqldef('mysql', tin.value, tchange.value)
     </script>
   </body>
 </html>
