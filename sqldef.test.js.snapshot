@@ -1,0 +1,19 @@
+exports[`should be able to diff some mssql 1`] = `
+"ALTER TABLE [dbo].[Employee] ADD [EmployeeID] int NOT NULL;\\nALTER TABLE [dbo].[Employee] DROP CONSTRAINT [PRIMARY];\\nALTER TABLE [dbo].[Employee] ADD PRIMARY KEY CLUSTERED ([EmployeeID]);\\nALTER TABLE [dbo].[Employee] DROP COLUMN [Employee]"
+`;
+
+exports[`should be able to diff some mysql 1`] = `
+"ALTER TABLE \`user\` DROP COLUMN \`created_at\`"
+`;
+
+exports[`should be able to diff some postgres 1`] = `
+"ALTER TABLE \\"\\".\\"user\\" DROP COLUMN \\"name\\";\\nALTER TABLE \\"\\".\\"user\\" DROP COLUMN \\"location\\""
+`;
+
+exports[`should be able to diff some sqlite 1`] = `
+"ALTER TABLE \`user\` CHANGE COLUMN \`id\` \`id\` int NOT NULL;\\nALTER TABLE \`user\` DROP COLUMN \`name\`"
+`;
+
+exports[`should throw on bad SQL 1`] = `
+"found syntax error when parsing DDL \\"BAD STUFF\\": syntax error at position 4 near 'BAD'"
+`;
