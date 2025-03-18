@@ -5,6 +5,8 @@ import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import { cosmiconfig } from 'cosmiconfig'
 import Confirm from 'prompt-confirm'
+import SqliteDatabase from 'better-sqlite3'
+import mysql from 'mysql2/promise'
 import sqldef from './index.js'
 
 // get a reasonable port
@@ -24,7 +26,36 @@ const getPort = (args) => {
 
 // get the current structure of database, as text
 async function getStructure({ type, host, database, user, password, socket, port }) {
-  console.log({ type, host, database, user, password, socket, port })
+  if (type === 'sqlite') {
+    const db = new SqliteDatabase(host)
+    const tables = db.prepare('SELECT sql FROM sqlite_master WHERE type = "table" AND name NOT LIKE "sqlite_%"').all()
+    return tables.map((t) => t.sql).join(';\n') + ';'
+  } else if (type === 'mysql') {
+    const connection = await mysql.createConnection({
+      host,
+      user,
+      password,
+      database,
+      socket,
+      port
+    })
+    const [tables] = await connection.query('SELECT table_name FROM information_schema.tables WHERE table_schema = ?', [database])
+    return (
+      (
+        await Promise.all(
+          tables.map(async (table) => {
+            const tableName = table.table_name
+            const [result] = await connection.query(`SHOW CREATE TABLE \`${tableName}\``)
+            if (result && result[0]) {
+              return result[0]['Create Table']
+            } else {
+              return ''
+            }
+          })
+        )
+      ).join(';\n') + ';'
+    )
+  }
 }
 
 // export the current database as a file
@@ -36,8 +67,10 @@ async function handleExport({ file, type, host, database, user, password, socket
 // import database from file (using diff)
 async function handleImport({ newStruct, type, host, database, user, password, socket, port, dry = false }) {
   const current = await getStructure({ type, host, database, user, password, socket, port })
+  const diff = await sqldef(type, current, newStruct)
   if (dry) {
-    console.log('dry')
+    console.log(diff)
+    return
   }
 }
 
@@ -101,7 +134,7 @@ yargs(hideBin(process.argv))
 
   .option('h', {
     alias: 'host',
-    describe: 'The host of the database',
+    describe: 'The host (or filename for sqlite) of the database',
     nargs: 1,
     default: config.host || 'localhost'
   })
