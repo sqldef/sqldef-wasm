@@ -9,23 +9,29 @@ npm i sqldef
 ```
 
 ```js
-import sqldef from sqldef
+import sqldef from 'sqldef'
 
-const output = await (sqldef({
-  type,         // the type of your database ("mysql" or "postgres")
-  database,     // the name of your database
-  user,         // the username of your database
-  password,     // the password of your database
-  host,         // the hostname of your database
-  port,         // the port of your database
-  socket,       // the unix socket (for mysql)
-  file,         // the schema file to read/write
-  dry: true,    // dry run - don't do anything to the database
-  get: true     // get the current definition from database
-}))
+const sql1 = `
+CREATE TABLE user (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(128) DEFAULT 'konsumer'
+) Engine=InnoDB DEFAULT CHARSET=utf8mb4;
+`
+
+const sql2 = `
+CREATE TABLE user (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(128) DEFAULT 'konsumer',
+  created_at DATETIME NOT NULL
+) Engine=InnoDB DEFAULT CHARSET=utf8mb4;
+`
+
+const output = await sqldef('mysql', sql1, sql2)
 ```
 
-_TODO_: notes about web
+_TODO_: notes about web/bun/deno/etc
+_TODO_: make node CLI that can actually perform operations on real database
+
 
 ### development
 
