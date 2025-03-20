@@ -46,8 +46,3 @@ npm start
 # run all unit-tests
 npm t
 ```
-
-## todo
-
-- more notes about web/bun/deno/etc
-- make node CLI that can actually perform operations on real database
