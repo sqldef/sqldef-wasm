@@ -5,9 +5,8 @@ import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import { cosmiconfig } from 'cosmiconfig'
 import Confirm from 'prompt-confirm'
-import SqliteDatabase from 'better-sqlite3'
-import mysql from 'mysql2/promise'
-import sqldef from './index.js'
+import sqldef from './src/index.js'
+import { getStructure, executeQuery } from './src/db.js'
 
 // get a reasonable port
 const getPort = (args) => {
@@ -24,40 +23,6 @@ const getPort = (args) => {
   }
 }
 
-// get the current structure of database, as text
-async function getStructure({ type, host, database, user, password, socket, port }) {
-  if (type === 'sqlite') {
-    const db = new SqliteDatabase(host)
-    const tables = db.prepare('SELECT sql FROM sqlite_master WHERE type = "table" AND name NOT LIKE "sqlite_%"').all()
-    return tables.map((t) => t.sql).join(';\n') + ';'
-  } else if (type === 'mysql') {
-    const connection = await mysql.createConnection({
-      host,
-      user,
-      password,
-      database,
-      socket,
-      port
-    })
-    const [tables] = await connection.query('SELECT table_name FROM information_schema.tables WHERE table_schema = ?', [database])
-    return (
-      (
-        await Promise.all(
-          tables.map(async (table) => {
-            const tableName = table.table_name
-            const [result] = await connection.query(`SHOW CREATE TABLE \`${tableName}\``)
-            if (result && result[0]) {
-              return result[0]['Create Table']
-            } else {
-              return ''
-            }
-          })
-        )
-      ).join(';\n') + ';'
-    )
-  }
-}
-
 // export the current database as a file
 async function handleExport({ file, type, host, database, user, password, socket, port }) {
   const current = await getStructure({ type, host, database, user, password, socket, port })
@@ -68,24 +33,27 @@ async function handleExport({ file, type, host, database, user, password, socket
 async function handleImport({ newStruct, type, host, database, user, password, socket, port, dry = false }) {
   const current = await getStructure({ type, host, database, user, password, socket, port })
   const diff = await sqldef(type, current, newStruct)
-  if (dry) {
-    console.log(diff)
-    return
+  if (!diff.trim()) {
+    return ''
   }
+  if (dry) {
+    return diff
+  }
+  await executeQuery({ host, database, user, password, socket, port, query: diff })
 }
 
 const explorer = cosmiconfig('sqldef')
 const r = (await explorer.search()) || { config: {} }
 const { config = {} } = r
 yargs(hideBin(process.argv))
-  .demandCommand()
+  .demandCommand(1, 'You need to use a command (import/export)')
   .usage('Usage: $0 <command> [options]')
   .help('?')
   .alias('?', 'help')
 
   .alias('v', 'version')
-  .example('$0 export --user=cool --password=mysecret --database=mydatabase', 'Save your current schema, from your mysql database, in schema.sql')
-  .example('$0 import --user=cool --password=mysecret --database=mydatabase', 'Update your database to match schema.sql')
+  .example('$0 export', 'Save your current schema, from your mysql database, in schema.sql')
+  .example('$0 import', 'Update your database to match schema.sql')
 
   .command(
     'export',
@@ -105,9 +73,9 @@ yargs(hideBin(process.argv))
     (a) => {},
     async (args) => {
       const { file, type, host, database, user, password, socket, noConfirm, port = getPort(args) } = args
-      const newStruct = await readFile(file)
+      const newStruct = await readFile(file, 'utf8')
       if (!noConfirm) {
-        await handleImport({ file, type, host, database, user, password, socket, port, ...config, dry: true })
+        await handleImport({ newStruct, type, host, database, user, password, socket, port, ...config, dry: true })
         const prompt = new Confirm('Do you want to run this?')
         if (!(await prompt.run())) {
           console.error('Export canceled.')
@@ -129,6 +97,7 @@ yargs(hideBin(process.argv))
     alias: 'type',
     describe: 'The type of the database',
     nargs: 1,
+    choices: ['mysql', 'sqlite3', 'mssql', 'postgres'],
     default: config.type || 'mysql'
   })
 
@@ -176,7 +145,7 @@ yargs(hideBin(process.argv))
 
   .option('x', {
     alias: 'no-confirm',
-    describe: "Don't confirm before running the import/export",
+    describe: "Don't confirm before running the import",
     type: 'boolean',
     default: config['no-confirm']
   }).argv

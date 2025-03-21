@@ -9,12 +9,13 @@
     "postgres"
   ],
   "exports": {
-    ".": "./index.js"
+    ".": "./src/index.js",
+    "./db": "./src/db.js"
   },
   "scripts": {
     "test": "node --test",
-    "start": "npx -y live-server docs --mount=/sqldef:.",
-    "build": "cd go && GOOS=js GOARCH=wasm tinygo build -target wasm -o sqldef.wasm sqldef-wasm.go && cp $(tinygo env TINYGOROOT)/targets/wasm_exec.js . && cd .. && node build.js"
+    "start": "npx -y live-server demo --mount=/sqldef:src",
+    "build": "cd src/go && GOOS=js GOARCH=wasm tinygo build -target wasm -o sqldef.wasm sqldef-wasm.go && cp $(tinygo env TINYGOROOT)/targets/wasm_exec.js . && cd ../.. && node build.js"
   },
   "author": "David Konsumer <konsumer@jetboystudio.com> (http://konsumer.js.org)",
   "license": "MIT",

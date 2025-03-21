@@ -45,4 +45,8 @@ npm start
 
 # run all unit-tests
 npm t
+
+# use the CLI
+sqlite3 test.sqlite < test/sqlite3.sql
+./cli.mjs import -f test/sqlite3.sql -t sqlite3 -h test.sqlite
 ```

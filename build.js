@@ -2,10 +2,10 @@
 
 import { readFile, writeFile } from 'node:fs/promises'
 
-const buf = await readFile('./go/sqldef.wasm')
+const buf = await readFile('./src/go/sqldef.wasm')
 
 await writeFile(
-  'index.js',
+  'src/index.js',
   `import './go/wasm_exec.js'
 const buf = new Uint8Array([${[...buf].join(',')}])
 const go = new Go()
