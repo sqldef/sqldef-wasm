@@ -1,5 +1,5 @@
 import { test } from 'node:test'
-import sqldef from './index.js'
+import sqldef from '../index.js'
 
 test('should be able to diff some mysql', async ({ assert }) => {
   const sql1 = `
