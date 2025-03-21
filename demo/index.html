@@ -36,7 +36,7 @@ CREATE TABLE user (
     </div>
 
     <script type="module">
-      import sqldef from '/sqldef/index.js'
+      import sqldef from './sqldef/index.js'
       const [tin, tchange, tout] = document.querySelectorAll('textarea')
       tout.value = await sqldef('mysql', tin.value, tchange.value)
     </script>
