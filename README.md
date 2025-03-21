@@ -17,7 +17,7 @@ npm i -g sqldef@latest
 sqldef --help
 ```
 
-I recommend using the [upstream CLI](https://github.com/sqldef/sqldef), though, if you are not using nodejs for other things.
+I recommend using the [upstream CLIs](https://github.com/sqldef/sqldef), though, if you are not using nodejs for other things. It's a bit faster, and the seperate versions for each database-type are nice.
 
 
 ### node/bun/etc
